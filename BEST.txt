@@ -1,0 +1,58 @@
+﻿/*
+    alert(app.activeDocument.xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlAttributes.item(1).value);
+    for each record, create a file named "record///contentIDValue.xml
+*/
+
+
+/*
+    alert(app.activeDocument.xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlAttributes.item(1).value);
+    for each record, create a file named "record///contentIDValue.xml
+*/
+
+/*while (itemsWithValueAttributes--)
+{
+ app.activeDocument.xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlAttributes.item(1).convertToElement();
+}
+//Transform Attributes into Elements
+
+*/
+
+function transformAttributes() {
+	doc = app.activeDocument;
+	root = doc.xmlElements[0];
+	records = root.evaluateXPathExpression ( "./record" );    
+    n = records.length;
+while ( n-- ) {    
+var itemsWithValueAttributes =  app.activeDocument.xmlElements.item(0).xmlElements.item(n/*change this to n*/).xmlElements.item(0).xmlElements.item(0).xmlElements;
+var i = itemsWithValueAttributes.length;
+while (i--){
+    if (itemsWithValueAttributes[i] instanceof XMLElement){
+      app.activeDocument.xmlElements.item(0).xmlElements.item(n/*change this to n*/).xmlElements.item(0).xmlElements.item(0).xmlElements.item(i).xmlAttributes.item(1).convertToElement();
+                }
+            }
+        }
+}
+
+
+
+function exportToDesktop(){
+var root, records, f, n, doc;
+
+	doc = app.activeDocument;
+	root = doc.xmlElements[0];
+	records = root.evaluateXPathExpression ( "./record" );
+	n = records.length;
+	while ( n-- ) {
+            var ff = new Folder(Folder.desktop + "/" +app.activeDocument.xmlElements.item(0).xmlElements.item(n).xmlElements.item(0).xmlAttributes.item(0).value + "/data/" + 
+                                    app.activeDocument.xmlElements.item(0).xmlElements.item(n).xmlElements.item(0).xmlElements.item(0).xmlElements.item(1).xmlElements.item(0).contents  + "/" +
+                                    app.activeDocument.xmlElements.item(0).xmlElements.item(n).xmlElements.item(0).xmlElements.item(0).xmlElements.item(2).xmlElements.item(0).contents);
+    if (!ff.exists)
+        ff.create();
+        
+		f = File ( ff +"/"+app.activeDocument.xmlElements.item(0).xmlElements.item(n).xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).contents);
+		records[n].exportFile ( ExportFormat.XML, f);
+	}
+}
+
+transformAttributes();
+exportToDesktop();

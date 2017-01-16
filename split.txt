@@ -1,0 +1,17 @@
+﻿/*
+    alert(app.activeDocument.xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlAttributes.item(1).value);
+    for each record, create a file named "record///contentIDValue.xml
+*/
+
+
+
+var root, records, f, n, doc;
+
+	doc = app.activeDocument;
+	root = doc.xmlElements[0];
+	records = root.evaluateXPathExpression ( "./record" );
+	n = records.length;
+	while ( n-- ) {
+		f = File ( Folder.desktop+"/"+app.activeDocument.xmlElements.item(0).xmlElements.item(n).xmlElements.item(0).xmlElements.item(0).xmlElements.item(0).xmlAttributes.item(1).value+".xml" );
+		records[n].exportFile ( ExportFormat.XML, f );
+	}
